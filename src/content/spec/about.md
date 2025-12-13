@@ -1,8 +1,4 @@
 # About
----
-title: 关于
-layout: page
----
 
 你好，我是 **NeolnaX**。
 
