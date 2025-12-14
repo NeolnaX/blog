@@ -1,0 +1,35 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface Props {
+	name: string;
+	url: string;
+	avatar: string;
+	description?: string;
+}
+
+const { name, url, avatar, description } = Astro.props;
+---
+<a href={url} target="_blank" rel="noopener noreferrer"
+   class="card-base group flex items-center gap-4 p-4 hover:scale-[1.02] active:scale-95 transition-all duration-300">
+    <div class="relative shrink-0 w-16 h-16 rounded-full overflow-hidden bg-[var(--btn-regular-bg)]">
+        <img src={avatar} alt={`${name}'s avatar`}
+             class="w-full h-full object-cover transition group-hover:scale-110"
+             loading="lazy"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
+        <div class="absolute inset-0 items-center justify-center hidden bg-[var(--btn-regular-bg)]">
+            <Icon name="fa6-solid:user" class="text-2xl text-[var(--primary)]" />
+        </div>
+    </div>
+    <div class="flex-1 min-w-0">
+        <div class="font-bold text-lg text-90 group-hover:text-[var(--primary)] transition flex items-center gap-1">
+            <span class="truncate">{name}</span>
+            <Icon name="fa6-solid:arrow-up-right-from-square" class="text-xs opacity-0 group-hover:opacity-100 transition shrink-0" />
+        </div>
+        {description && (
+            <div class="text-sm text-50 mt-1 line-clamp-2 transition">
+                {description}
+            </div>
+        )}
+    </div>
+</a>

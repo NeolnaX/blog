@@ -1,0 +1,52 @@
+---
+import FriendCard from "@components/FriendCard.astro";
+import I18nKey from "../i18n/i18nKey";
+import { i18n } from "../i18n/translation";
+import MainGridLayout from "../layouts/MainGridLayout.astro";
+
+// 自动读取 src/data/ 文件夹下所有 JSON 文件（每个文件一个友链）
+const friendFiles = import.meta.glob<{ default: { name: string; url: string; avatar: string; description?: string } }>("../data/*.json", { eager: true });
+
+const friends = Object.values(friendFiles).map((module) => module.default);
+---
+<MainGridLayout title={i18n(I18nKey.links)} description={i18n(I18nKey.links)}>
+	<div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32">
+		<div class="card-base z-10 px-6 md:px-9 py-6 relative w-full">
+			<h1 class="text-2xl font-bold mb-6 text-90 flex items-center gap-2">
+				<div class="w-1 h-6 rounded-md bg-[var(--primary)]"></div>
+				{i18n(I18nKey.links)}
+			</h1>
+
+			<div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+				{friends.map((friend) => (
+					<FriendCard
+						name={friend.name}
+						url={friend.url}
+						avatar={friend.avatar}
+						description={friend.description}
+					/>
+				))}
+			</div>
+
+			{friends.length === 0 && (
+				<div class="text-center text-50 py-12">
+					暂无友链
+				</div>
+			)}
+
+			<div class="mt-8 p-4 rounded-xl bg-[var(--btn-regular-bg)] text-75">
+				<h2 class="font-bold mb-2">申请友链</h2>
+				<p class="text-sm mb-3">
+					如果你想交换友链，请发送邮件至以下邮箱，并提供你的网站名称、链接、头像和简介。
+				</p>
+				<a href="mailto:neolnax@outlook.com?subject=友链申请&body=网站名称：%0A网站链接：%0A头像链接：%0A网站简介："
+				   class="inline-flex items-center gap-2 btn-regular rounded-lg px-4 py-2 text-sm font-medium active:scale-95 transition">
+					<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+						<path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+					</svg>
+					neolnax@outlook.com
+				</a>
+			</div>
+		</div>
+	</div>
+</MainGridLayout>
