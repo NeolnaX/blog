@@ -2,10 +2,10 @@
 title: 稚嫩却真诚
 published: 2025-12-13
 description: '朝花夕拾之梦'
-image: '/images/blog/first-blog.webp'
+image: './cover.webp'
 tags: [博文]
 category: 日常
-draft: false 
+draft: false
 ---
 **很久以前就有做个博客、写点东西的念头，却总在中途放弃。**
 

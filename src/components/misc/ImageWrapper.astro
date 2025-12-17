@@ -11,9 +11,10 @@ interface Props {
 	widths?: number[];
 	sizes?: string;
 	loading?: "lazy" | "eager";
+	formats?: ("avif" | "webp" | "png" | "jpg")[];
 }
 
-import { Image } from "astro:assets";
+import { Picture } from "astro:assets";
 import { url } from "../../utils/url-utils";
 
 const {
@@ -24,7 +25,8 @@ const {
 	basePath = "/",
 	widths = [400, 800, 1200],
 	sizes = "(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 800px",
-	loading = "lazy"
+	loading = "lazy",
+	formats = ["avif", "webp"]
 } = Astro.props;
 const className = Astro.props.class;
 
@@ -35,6 +37,7 @@ const isLocal = !(
 	src.startsWith("data:")
 );
 const isPublic = src.startsWith("/");
+const isExternal = src.startsWith("http") || src.startsWith("https");
 
 // TODO temporary workaround for images dynamic import
 // https://github.com/withastro/astro/issues/3373
@@ -61,8 +64,10 @@ const imageStyle = `object-position: ${position}`;
 ---
 <div id={id} class:list={[className, 'overflow-hidden relative']}>
     <div class="transition absolute inset-0 dark:bg-black/10 bg-opacity-50 pointer-events-none"></div>
+
+    {/* 本地图片使用 Picture 组件 */}
     {isLocal && img && (
-		<Image
+		<Picture
 			src={img}
 			alt={alt || ""}
 			class={imageClass}
@@ -70,10 +75,12 @@ const imageStyle = `object-position: ${position}`;
 			widths={widths}
 			sizes={sizes}
 			loading={loading}
-			format="webp"
+			formats={formats}
 			quality={80}
 		/>
 	)}
+
+    {/* 公共图片和外部图片使用原生 img 标签 */}
     {!isLocal && (
 		<img
 			src={isPublic ? url(src) : src}
