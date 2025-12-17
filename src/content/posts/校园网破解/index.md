@@ -168,9 +168,9 @@ UA3F 有三种重写策略：
 
 **服务模式选择：**
 
-- **HTTP/SOCKS5**：兼容性好，但性能一般
-- **NFQUEUE**：性能最好，推荐用这个（需要 iptables/nftables）
-- **TPROXY/REDIRECT**：特殊场景用
+- **TPROXY/REDIRECT**：性能好兼容性也好，优先选这个
+- **HTTP/SOCKS5**：兼容性最好，但性能一般，有特殊需求时用
+- **NFQUEUE**：性能最强，追求极致性能时用
 
 **快速配置（LuCI 界面）：**
 

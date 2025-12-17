@@ -47,16 +47,28 @@ if (isLocal) {
 	const files = import.meta.glob<ImageMetadata>("../../**", {
 		import: "default",
 	});
+
+	// 首先尝试从 assets/images 目录查找
 	let normalizedPath = path
-		.normalize(path.join("../../", basePath, src))
+		.normalize(path.join("../../assets/images/", src))
 		.replace(/\\/g, "/");
-	const file = files[normalizedPath];
+	let file = files[normalizedPath];
+
+	// 如果在 assets/images 中找不到，尝试从原始 basePath 查找（兼容旧路径）
+	if (!file) {
+		normalizedPath = path
+			.normalize(path.join("../../", basePath, src))
+			.replace(/\\/g, "/");
+		file = files[normalizedPath];
+	}
+
 	if (!file) {
 		console.error(
 			`\n[ERROR] Image file not found: ${normalizedPath.replace("../../", "src/")}`,
 		);
+	} else {
+		img = await file();
 	}
-	img = await file();
 }
 
 const imageClass = "w-full h-full object-cover";
